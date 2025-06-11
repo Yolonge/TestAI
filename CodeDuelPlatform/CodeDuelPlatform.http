@@ -1,0 +1,6 @@
+@CodeDuelPlatform_HostAddress = http://localhost:5223
+
+GET {{CodeDuelPlatform_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
