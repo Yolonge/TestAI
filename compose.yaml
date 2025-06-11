@@ -47,7 +47,6 @@ networks:
       - NODE_ENV=production
     networks:
       - dev
-
   postgres:
     image: postgres:15-alpine
     environment:
@@ -60,7 +59,6 @@ networks:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - dev
-
   redis:
     image: redis:7.0-alpine
     command: redis-server --appendonly yes --requirepass redis_password
@@ -70,7 +68,6 @@ networks:
       - redis_data:/data
     networks:
       - dev
-
 volumes:
   postgres_data:
   redis_data:
