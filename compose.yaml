@@ -1,6 +1,5 @@
 networks:
   dev:
-  
 ﻿services:
   nginx:
     image: nginx:stable-alpine
