@@ -50,7 +50,8 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:8000", 
                           "http://localhost:8080",
                           "http://127.0.0.1:5500",
-                          "http://localhost:3000") // Добавлен хост откуда отправляется запрос
+                          "http://localhost:3000",
+                          "http://176.109.104.178") // Добавлен хост откуда отправляется запрос
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
