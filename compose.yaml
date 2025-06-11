@@ -17,7 +17,7 @@
       - postgres
       - redis
     environment:
-      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=host.docker.internal;Port=5432;Database=testai;
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=postgres;Port=5432;Database=testai;
       - ConnectionStrings__RedisConnection=redis:6379,password=redis_password
       - Redis__MatchmakingQueueExpiry=300
       - Redis__ActiveDuelExpiry=3600
