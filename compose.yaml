@@ -8,16 +8,15 @@
       - postgres
       - redis
     environment:
-      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=postgres;Port=5432;Database=testai;
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=host.docker.internal;Port=5432;Database=testai;
       - ConnectionStrings__RedisConnection=redis:6379,password=redis_password
       - Redis__MatchmakingQueueExpiry=300
       - Redis__ActiveDuelExpiry=3600
-      - Jwt__Issuer=CodeDuelPlatform
-      - Jwt__Audience=CodeDuelUsers
-      - Jwt__Key=your_super_secure_key_replace_in_production_minimum_16_chars
     ports:
       - "8080:80"
       - "8081:443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   frontend:
     image: frontend-react
@@ -30,7 +29,6 @@
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - BACKEND_URL=http://176.109.111.167:8080
 
   postgres:
     image: postgres:15-alpine

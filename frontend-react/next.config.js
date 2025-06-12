@@ -5,19 +5,16 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   async rewrites() {
-    // Определяем URL бэкенда на основе окружения
-    const backendUrl = process.env.BACKEND_URL || 'http://codeduelplatform:80';
-    
     return [
       // Проксирование API запросов на бэкенд
       {
         source: '/api/:path*',
-        destination: `${backendUrl}/api/:path*`, // URL бэкенда с переменной
+        destination: 'http://codeduelplatform:80/api/:path*', // URL бэкенда в Docker
       },
       // Проксирование SignalR хаба
       {
         source: '/hubs/:path*',
-        destination: `${backendUrl}/hubs/:path*`, // URL бэкенда с переменной
+        destination: 'http://codeduelplatform:80/hubs/:path*', // URL бэкенда в Docker
       },
     ];
   },
