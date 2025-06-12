@@ -49,6 +49,16 @@
     volumes:
       - redis_data:/data
 
+  nginx:
+    image: nginx:stable-alpine
+    ports: 
+      - "80:80"
+    depends_on:
+      - codeduelplatform
+      - frontend
+    volumes:
+      - './nginx.conf:/etc/nginx/nginx.conf'
+
 volumes:
   postgres_data:
   redis_data:
