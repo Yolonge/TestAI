@@ -1,4 +1,7 @@
-﻿services:
+networks:
+  dev:
+
+services:
   nginx:
     image: nginx:stable-alpine
     ports: 
@@ -8,6 +11,8 @@
       - frontend
     volumes:
       - './nginx.conf:/etc/nginx/nginx.conf'
+    networks:
+      - dev
   codeduelplatform:
     image: codeduelplatform
     build:
@@ -17,7 +22,7 @@
       - postgres
       - redis
     environment:
-      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=host.docker.internal;Port=5432;Database=testai;
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=postgres;Port=5432;Database=testai;
       - ConnectionStrings__RedisConnection=redis:6379,password=redis_password
       - Redis__MatchmakingQueueExpiry=300
       - Redis__ActiveDuelExpiry=3600
@@ -26,6 +31,8 @@
       - "8081:443"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      - dev
 
   frontend:
     image: frontend-react
@@ -38,7 +45,9 @@
       - "3000:3000"
     environment:
       - NODE_ENV=production
-
+      - HOST=0.0.0.0
+    networks:
+      - dev
   postgres:
     image: postgres:15-alpine
     environment:
@@ -49,7 +58,8 @@
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+    networks:
+      - dev
   redis:
     image: redis:7.0-alpine
     command: redis-server --appendonly yes --requirepass redis_password
@@ -57,7 +67,8 @@
       - "6379:6379"
     volumes:
       - redis_data:/data
-
+    networks:
+      - dev
 volumes:
   postgres_data:
   redis_data:
