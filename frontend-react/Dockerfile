@@ -15,7 +15,13 @@ COPY . .
 # Собираем приложение
 RUN npm run build
 
-# Запускаем приложение
-CMD ["npm", "start"]
+# Для режима standalone нужно скопировать файлы в соответствующий каталог
+RUN cp -R public ./.next/standalone/public
+RUN cp -R .next/static ./.next/standalone/.next/static
+
+WORKDIR /app/.next/standalone
+
+# Запускаем приложение правильным способом для режима standalone
+CMD ["node", "server.js"]
 
 EXPOSE 3000 
