@@ -12,6 +12,11 @@ RUN npm ci
 # Копируем исходный код
 COPY . .
 
+# Устанавливаем переменные среды для сборки
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV HOSTNAME "0.0.0.0"
+ENV PORT 3000
+
 # Собираем приложение
 RUN npm run build
 

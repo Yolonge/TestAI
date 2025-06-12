@@ -29,6 +29,10 @@
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://176.109.111.167/api
+      - NEXT_PUBLIC_HUB_URL=http://176.109.111.167/hubs
 
   nginx:
     image: nginx:alpine
