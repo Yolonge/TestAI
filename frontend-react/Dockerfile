@@ -15,7 +15,14 @@ COPY . .
 # Собираем приложение
 RUN npm run build
 
+# Настраиваем запуск в режиме standalone
+WORKDIR /app/.next/standalone
+
+# Копируем статические файлы и публичные ресурсы
+COPY --from=0 /app/.next/static /app/.next/standalone/.next/static
+COPY --from=0 /app/public /app/.next/standalone/public
+
 # Запускаем приложение
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
 
 EXPOSE 3000 
