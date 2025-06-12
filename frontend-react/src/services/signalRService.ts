@@ -17,7 +17,7 @@ class SignalRService {
       
       // Создаем подключение к хабу
       this.hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl('http://localhost:8080/hubs/duel')
+        .withUrl('/hubs/duel')
         .withAutomaticReconnect()
         .build();
 
