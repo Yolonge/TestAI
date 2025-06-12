@@ -17,6 +17,9 @@ RUN dotnet publish "CodeDuelPlatform.csproj" -c Release -o /app/publish /p:UseAp
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
+# Устанавливаем инструменты для отладки
+RUN apt-get update && apt-get install -y net-tools iputils-ping curl
+
 # Копируем файлы из сборочного образа
 COPY --from=build /app/publish .
 

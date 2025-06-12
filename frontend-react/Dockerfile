@@ -14,8 +14,11 @@ COPY . .
 # Собираем приложение
 RUN npm run build
 
+# Устанавливаем netstat для отладки
+RUN apk add --no-cache net-tools busybox-extras
+
 # Открываем порт
 EXPOSE 3000
 
-# Запускаем приложение (исправлено для поддержки output: standalone)
-CMD ["sh", "-c", "if [ -d .next/standalone ]; then node .next/standalone/server.js; else npm start; fi"] 
+# Запускаем приложение
+CMD ["sh", "-c", "echo 'Запуск Next.js приложения на порту 3000...' && NODE_ENV=production npm start"] 
