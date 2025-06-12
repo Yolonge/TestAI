@@ -16,8 +16,11 @@ class SignalRService {
       console.log(`Инициализация SignalR соединения для пользователя ${userId}...`);
       
       // Создаем подключение к хабу
+      const hubUrl = '/hubs/duel';
+      console.log('Подключение к хабу по URL:', hubUrl);
+      
       this.hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl('/hubs/duel')
+        .withUrl(hubUrl)
         .withAutomaticReconnect()
         .build();
 

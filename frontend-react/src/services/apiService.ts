@@ -3,6 +3,9 @@ import axios from 'axios';
 // Базовый URL для API
 const API_URL = '/api';
 
+// Для отладки
+console.log('API URL:', API_URL);
+
 // Типы данных
 export interface Question {
   id: number;

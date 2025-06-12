@@ -24,9 +24,18 @@ fi
 echo "Останавливаем и удаляем существующие контейнеры..."
 docker compose down
 
+# Удаляем старые образы для гарантии чистой сборки
+echo "Удаляем старые образы..."
+docker image rm -f frontend-react codeduelplatform 2>/dev/null || true
+
 # Сборка и запуск контейнеров
 echo "Собираем и запускаем контейнеры..."
-docker compose build
+docker compose build --no-cache
 docker compose up -d
 
-echo "Деплой завершен! Приложение доступно по адресу http://176.109.111.167" 
+# Проверка статуса контейнеров
+echo "Проверяем статус контейнеров..."
+docker compose ps
+
+echo "Деплой завершен! Приложение доступно по адресу http://176.109.111.167"
+echo "Для просмотра логов используйте команду: docker compose logs -f" 
