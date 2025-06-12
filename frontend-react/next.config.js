@@ -4,6 +4,12 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Явно указываем, что приложение должно слушать все интерфейсы
+  experimental: {
+    serverComponentsExternalPackages: [],
+  },
+  // Настройка для корректной работы с внешними запросами
+  assetPrefix: process.env.NODE_ENV === 'production' ? 'http://176.109.111.167' : '',
   async rewrites() {
     return [
       // Проксирование API запросов на бэкенд

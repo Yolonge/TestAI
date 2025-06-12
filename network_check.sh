@@ -14,9 +14,9 @@ echo -e "\n=== Активные соединения ==="
 sudo netstat -tulpn
 
 echo -e "\n=== Проверка доступности сервисов внутри контейнеров ==="
-docker-compose exec frontend curl -I http://localhost:3000 || echo "Не удалось подключиться к frontend на порту 3000"
-docker-compose exec nginx curl -I http://localhost:80 || echo "Не удалось подключиться к nginx на порту 80"
-docker-compose exec nginx curl -I http://frontend:3000 || echo "Не удалось подключиться к frontend из nginx"
+docker compose exec frontend curl -I http://localhost:3000 || echo "Не удалось подключиться к frontend на порту 3000"
+docker compose exec nginx curl -I http://localhost:80 || echo "Не удалось подключиться к nginx на порту 80"
+docker compose exec nginx curl -I http://frontend:3000 || echo "Не удалось подключиться к frontend из nginx"
 
 echo -e "\n=== Внешняя проверка ==="
 curl -v http://localhost:80

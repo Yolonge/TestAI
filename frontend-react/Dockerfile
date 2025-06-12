@@ -16,6 +16,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV HOSTNAME "0.0.0.0"
 ENV PORT 3000
+ENV NODE_ENV production
 
 # Собираем приложение
 RUN npm run build
@@ -25,6 +26,11 @@ RUN cp -R public ./.next/standalone/public
 RUN cp -R .next/static ./.next/standalone/.next/static
 
 WORKDIR /app/.next/standalone
+
+# Устанавливаем переменные среды для запуска
+ENV NODE_ENV production
+ENV HOSTNAME "0.0.0.0"
+ENV PORT 3000
 
 # Запускаем приложение правильным способом для режима standalone
 CMD ["node", "server.js"]
