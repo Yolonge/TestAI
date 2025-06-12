@@ -1,24 +1,41 @@
-FROM node:20-alpine
-
-WORKDIR /app
-
-# Копируем файлы зависимостей
-COPY package.json package-lock.json ./
+FROM node:18-alpine AS base
 
 # Устанавливаем зависимости
+FROM base AS deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Копируем исходный код
+# Сборка приложения
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Собираем приложение
 RUN npm run build
 
-# Устанавливаем netstat для отладки
-RUN apk add --no-cache net-tools busybox-extras
+# Финальный образ
+FROM base AS runner
+WORKDIR /app
 
-# Открываем порт
+ENV NODE_ENV production
+
+# Создаем пользователя nextjs
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Копируем необходимые файлы
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Правильные права для nextjs
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+
 EXPOSE 3000
 
-# Запускаем приложение
-CMD ["sh", "-c", "echo 'Запуск Next.js приложения на порту 3000...' && NODE_ENV=production npm start"] 
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"] 

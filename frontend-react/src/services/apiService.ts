@@ -1,10 +1,7 @@
 import axios from 'axios';
 
 // Базовый URL для API
-const API_URL = '/api';
-
-// Для отладки
-console.log('API URL:', API_URL);
+const API_URL = 'http://localhost:8080/api';
 
 // Типы данных
 export interface Question {
