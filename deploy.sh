@@ -37,5 +37,26 @@ docker compose up -d
 echo "Проверяем статус контейнеров..."
 docker compose ps
 
+# Проверка доступности сервисов
+echo "Проверка доступности сервисов..."
+echo "Nginx: curl http://localhost/static-check.html"
+curl -s http://localhost/static-check.html | grep -q "Nginx работает" && echo "✅ Nginx доступен" || echo "❌ Nginx недоступен"
+
+echo "Frontend: curl http://localhost/"
+curl -s http://localhost/ > /dev/null && echo "✅ Frontend доступен" || echo "❌ Frontend недоступен"
+
+echo "Backend: curl http://localhost/api/health"
+curl -s http://localhost/api/health > /dev/null && echo "✅ Backend API доступен" || echo "❌ Backend API недоступен"
+
+# Проверка логов контейнеров
+echo "Последние логи контейнеров:"
+echo "=== Nginx логи ==="
+docker compose logs --tail=10 nginx
+echo "=== Frontend логи ==="
+docker compose logs --tail=10 frontend
+echo "=== Backend логи ==="
+docker compose logs --tail=10 codeduelplatform
+
 echo "Деплой завершен! Приложение доступно по адресу http://176.109.111.167"
+echo "Для проверки работоспособности откройте: http://176.109.111.167/static-check.html"
 echo "Для просмотра логов используйте команду: docker compose logs -f" 

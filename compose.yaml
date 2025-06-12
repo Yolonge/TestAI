@@ -37,6 +37,7 @@
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./health-check.html:/usr/share/nginx/html/health-check.html:ro
+      - ./static-check.html:/usr/share/nginx/html/static-check.html:ro
     ports:
       - "80:80"
       - "443:443"
