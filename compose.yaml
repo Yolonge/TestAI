@@ -1,6 +1,6 @@
 networks:
   dev:
-  
+
 services:
   nginx:
     image: nginx:stable-alpine
@@ -45,6 +45,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - HOST=0.0.0.0
     networks:
       - dev
   postgres:
