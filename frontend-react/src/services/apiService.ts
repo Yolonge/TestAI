@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Базовый URL для API
-const API_URL = 'http://localhost:8080/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api` : 'http://localhost:8080/api';
 
 // Типы данных
 export interface Question {

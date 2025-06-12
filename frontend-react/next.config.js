@@ -4,17 +4,24 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+  },
   async rewrites() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ? 
+      process.env.NEXT_PUBLIC_API_URL : 
+      'http://codeduelplatform:80';
+
     return [
       // Проксирование API запросов на бэкенд
       {
         source: '/api/:path*',
-        destination: 'http://codeduelplatform:80/api/:path*', // URL бэкенда в Docker
+        destination: `${apiUrl}/api/:path*`,
       },
       // Проксирование SignalR хаба
       {
         source: '/hubs/:path*',
-        destination: 'http://codeduelplatform:80/hubs/:path*', // URL бэкенда в Docker
+        destination: `${apiUrl}/hubs/:path*`,
       },
     ];
   },
