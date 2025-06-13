@@ -37,10 +37,6 @@
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./CodeDuelPlatform/migrations.sql:/docker-entrypoint-initdb.d/01-migrations.sql
-      - ./CodeDuelPlatform/process-backup.sql:/docker-entrypoint-initdb.d/02-process-backup.sql
-      - ./CodeDuelPlatform/testai_backup.sql:/docker-entrypoint-initdb.d/03-import-data.sql
-      - ./CodeDuelPlatform/finalize-backup.sql:/docker-entrypoint-initdb.d/04-finalize-backup.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
