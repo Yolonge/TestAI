@@ -1,21 +1,19 @@
-FROM node:20-alpine AS base
+FROM node:18-alpine AS builder
+WORKDIR /app
 
-# Устанавливаем рабочую директорию
-WORKDIR /appAdd commentMore actions
-
-# Копируем package.json и package-lock.json
-COPY package*.json ./
-
-# Устанавливаем зависимости
+COPY package.json package-lock.json ./
 RUN npm ci
 
-# Копируем исходный код
 COPY . .
-
-# Собираем приложение
 RUN npm run build
 
-# Запускаем приложение
-CMD ["npm", "start"]
+FROM node:18-alpine AS runner
+WORKDIR /app
 
-EXPOSE 3000 
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/.next/standalone ./
+
+EXPOSE 3000
+
+ENTRYPOINT ["node", "server.js"]

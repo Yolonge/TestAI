@@ -18,17 +18,14 @@
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  frontend:
-    image: frontend-react
+  frontend-build:
     build:
       context: ./frontend-react
       dockerfile: Dockerfile
-    depends_on:
-      - codeduelplatform
-    ports:
-      - "3000:3000"
     environment:
       - NODE_ENV=production
+    ports:
+      - 3000:3000
 
   postgres:
     image: postgres:15-alpine
@@ -52,12 +49,14 @@
   nginx:
     image: nginx:stable-alpine
     ports: 
-      - "80:80"
+      - 80:80
     depends_on:
-      - codeduelplatform
-      - frontend
+      codeduelplatform:
+        condition: service_started
+      frontend-build:
+        condition: service_started
     volumes:
-      - './nginx.conf:/etc/nginx/nginx.conf'
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
 
 volumes:
   postgres_data:

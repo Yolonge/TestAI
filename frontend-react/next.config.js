@@ -4,6 +4,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  allowedOrigins: ["IP", "localhost:3000"],
   async rewrites() {
     return [
       // Проксирование API запросов на бэкенд
