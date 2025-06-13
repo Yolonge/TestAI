@@ -28,11 +28,14 @@
       - 3000:3000
 
   postgres:
-    image: postgres:15-alpine
+    build:
+      context: .
+      dockerfile: CodeDuelPlatform/db-init.Dockerfile
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=5959
       - POSTGRES_DB=testai
+      - POSTGRES_HOST=localhost
     ports:
       - "5432:5432"
     volumes:
@@ -42,6 +45,33 @@
       interval: 5s
       timeout: 5s
       retries: 5
+
+  db-init:
+    image: postgres:15-alpine
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=5959
+      - POSTGRES_DB=testai
+      - POSTGRES_HOST=postgres
+    volumes:
+      - ./CodeDuelPlatform/migrations.sql:/migrations.sql
+      - ./CodeDuelPlatform/testai_backup.sql:/testai_backup.sql
+    command: >
+      bash -c "
+        echo 'Ожидание готовности PostgreSQL...' &&
+        until PGPASSWORD=5959 psql -h postgres -U postgres -d testai -c '\q'; do
+          echo 'PostgreSQL недоступен - ожидание...'
+          sleep 1
+        done &&
+        echo 'Применение миграций...' &&
+        PGPASSWORD=5959 psql -h postgres -U postgres -d testai -f /migrations.sql &&
+        echo 'Восстановление данных из бэкапа...' &&
+        PGPASSWORD=5959 psql -h postgres -U postgres -d testai -f /testai_backup.sql &&
+        echo 'Инициализация базы данных завершена!'
+      "
 
   redis:
     image: redis:7.0-alpine
