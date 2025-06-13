@@ -5,10 +5,10 @@
       context: .
       dockerfile: CodeDuelPlatform/Dockerfile
     depends_on:
-      - postgres:
-        - condition: 
-          - service_healthy
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=postgres;Port=5432;Database=testai;
       - ConnectionStrings__RedisConnection=redis:6379,password=redis_password
@@ -40,10 +40,10 @@
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      - test: ["CMD-SHELL", "pg_isready -U postgres"]
-      - interval: 5s
-      - timeout: 5s
-      - retries: 5
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7.0-alpine
