@@ -6,7 +6,8 @@
       dockerfile: CodeDuelPlatform/Dockerfile
     depends_on:
       - postgres:
-        - condition: service_healthy
+        - condition: 
+          - service_healthy
       - redis
     environment:
       - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=postgres;Port=5432;Database=testai;
