@@ -7,8 +7,6 @@
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_started
     environment:
       - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=host.docker.internal;Port=5432;Database=testai;
       - ConnectionStrings__RedisConnection=redis:6379,password=redis_password
