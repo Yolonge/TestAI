@@ -157,12 +157,12 @@ export default function DuelResultsPage() {
                       {/* Отображение дополнительной информации в зависимости от типа вопроса */}
                       {question.questionType === 'MultipleChoice' && question.options && (
                         <div className="mb-4 p-3 bg-gray-50 rounded">
-                          <p className="font-semibold mb-2">Варианты ответов:</p>
-                          <ul className="list-disc pl-5">
+                          <p className="font-semibold mb-2 text-gray-900">Варианты ответов:</p>
+                          <ul className="list-disc pl-5 text-gray-800">
                             {question.options.map((option, optIndex) => (
                               <li 
                                 key={optIndex} 
-                                className={question.correctOptionIndex === optIndex ? 'font-bold text-green-600' : ''}
+                                className={question.correctOptionIndex === optIndex ? 'font-bold text-green-600' : 'text-gray-800'}
                               >
                                 {option} {question.correctOptionIndex === optIndex && '✓'}
                               </li>
@@ -173,14 +173,14 @@ export default function DuelResultsPage() {
                       
                       {question.questionType === 'FillBlanks' && question.template && (
                         <div className="mb-4 p-3 bg-gray-50 rounded">
-                          <p className="font-semibold mb-2">Шаблон с пропусками:</p>
-                          <code className="block p-2 bg-gray-100 rounded font-mono">
+                          <p className="font-semibold mb-2 text-gray-900">Шаблон с пропусками:</p>
+                          <code className="block p-2 bg-gray-100 rounded font-mono text-gray-800">
                             {question.template}
                           </code>
                           {question.blanks && question.blanks.length > 0 && (
                             <div className="mt-2">
-                              <p className="font-semibold mb-1">Значения для заполнения:</p>
-                              <ul className="list-disc pl-5">
+                              <p className="font-semibold mb-1 text-gray-900">Значения для заполнения:</p>
+                              <ul className="list-disc pl-5 text-gray-800">
                                 {question.blanks.map((blank, blankIndex) => (
                                   <li key={blankIndex}>{blank}</li>
                                 ))}

@@ -18,13 +18,13 @@ const MultipleChoiceQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (p
   return (
     <QuestionBase {...props}>
       <form onSubmit={handleSubmit}>
-        <div className="mb-6">
-          <h3 className="text-lg font-medium text-gray-700 mb-4">Выберите правильный вариант:</h3>
-          <div className="space-y-2">
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-base sm:text-lg font-medium text-gray-700 mb-2 sm:mb-4">Выберите правильный вариант:</h3>
+          <div className="space-y-1 sm:space-y-2">
             {question.options?.map((option, index) => (
               <div 
                 key={index}
-                className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                className={`p-2 sm:p-3 border rounded-lg cursor-pointer transition-colors ${
                   selectedOptionIndex === index 
                     ? 'bg-blue-100 border-blue-500' 
                     : 'bg-white border-gray-300 hover:bg-gray-50'
@@ -36,14 +36,14 @@ const MultipleChoiceQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (p
                     type="radio"
                     id={`option-${index}`}
                     name="option"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 focus:ring-blue-500"
                     checked={selectedOptionIndex === index}
                     onChange={() => setSelectedOptionIndex(index)}
                     disabled={submitted || timeLeft === 0}
                   />
                   <label 
                     htmlFor={`option-${index}`} 
-                    className="ml-3 block text-sm font-medium text-gray-700 cursor-pointer"
+                    className="ml-2 sm:ml-3 block text-xs sm:text-sm font-medium text-gray-700 cursor-pointer"
                   >
                     {option}
                   </label>
@@ -56,7 +56,7 @@ const MultipleChoiceQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (p
         <div className="flex justify-center">
           <button
             type="submit"
-            className={`py-3 px-8 rounded-lg text-white font-bold text-lg ${
+            className={`py-2 px-4 sm:py-3 sm:px-8 rounded-lg text-white font-bold text-sm sm:text-base ${
               selectedOptionIndex === null || submitted || loading || timeLeft === 0
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700'

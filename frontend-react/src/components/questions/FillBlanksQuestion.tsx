@@ -39,7 +39,7 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
     
     for (let i = 0; i < parts.length; i++) {
       // Добавляем текст части шаблона
-      result.push(<span key={`part-${i}`}>{parts[i]}</span>);
+      result.push(<span key={`part-${i}`} className="text-sm sm:text-base">{parts[i]}</span>);
       
       // Добавляем поле ввода после каждой части, кроме последней
       if (i < parts.length - 1) {
@@ -47,7 +47,7 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
           <input
             key={`input-${i}`}
             type="text"
-            className="mx-1 p-1 border border-gray-300 rounded w-24 text-center"
+            className="mx-1 p-1 border border-gray-300 rounded w-16 sm:w-24 text-center text-xs sm:text-sm"
             value={blankValues[i] || ''}
             onChange={(e) => handleBlankChange(i, e.target.value)}
             disabled={submitted || loading || timeLeft === 0}
@@ -57,26 +57,26 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
       }
     }
     
-    return <div className="bg-gray-100 p-4 rounded-lg font-mono text-lg mb-4">{result}</div>;
+    return <div className="bg-gray-100 p-3 sm:p-4 rounded-lg font-mono text-base sm:text-lg mb-3 sm:mb-4 text-gray-800 overflow-x-auto">{result}</div>;
   };
 
   return (
     <QuestionBase {...props}>
       <form onSubmit={handleSubmit}>
-        <div className="mb-6">
-          <h3 className="text-lg font-medium text-gray-700 mb-2">Заполните пропуски:</h3>
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-base sm:text-lg font-medium text-gray-700 mb-1 sm:mb-2">Заполните пропуски:</h3>
           
           {renderTemplate()}
           
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             {question.blanks?.map((blank, index) => (
-              <div key={index} className="mb-3">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div key={index} className="mb-2 sm:mb-3">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {blank}:
                 </label>
                 <input
                   type="text"
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-1.5 sm:p-2 border border-gray-300 rounded-md text-xs sm:text-sm"
                   value={blankValues[index] || ''}
                   onChange={(e) => handleBlankChange(index, e.target.value)}
                   disabled={submitted || loading || timeLeft === 0}
@@ -90,7 +90,7 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
         <div className="flex justify-center">
           <button
             type="submit"
-            className={`py-3 px-8 rounded-lg text-white font-bold text-lg ${
+            className={`py-2 px-4 sm:py-3 sm:px-8 rounded-lg text-white font-bold text-sm sm:text-base ${
               blankValues.some(val => !val.trim()) || submitted || loading || timeLeft === 0
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700'

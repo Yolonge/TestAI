@@ -16,29 +16,29 @@ export default function Navbar() {
 
   return (
     <nav className="navbar bg-gray-900 text-white shadow-md">
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between">
         {/* Левая часть хедера */}
-        <div className="flex items-center space-x-2">
-          <button className="p-3 hover:bg-gray-800" type="button" onClick={toggleMenu} aria-label="Меню приложения">
+        <div className="flex items-center space-x-1 sm:space-x-2">
+          <button className="p-2 sm:p-3 hover:bg-gray-800" type="button" onClick={toggleMenu} aria-label="Меню приложения">
             <svg className="w-5 h-5" fill="currentColor" fillRule="evenodd" viewBox="0 0 20 20">
-              <title>Меню облачного хедера</title>
+              <title>Меню</title>
               <path d="M0 0h20v2H0zm0 6h20v2H0zm0 6h20v2H0z" />
             </svg>
           </button>
           
-          <Link href="/" className="flex items-center py-3 px-4 flex-shrink-0">
+          <Link href="/" className="flex items-center py-2 px-2 sm:py-3 sm:px-4 flex-shrink-0">
             <h4 className="logo-title">
               <span>DealW/</span>
             </h4>
           </Link>
           
-          <ul className="hidden md:flex ml-2">
-            <li className="flex items-center">
-              <Link href="/" className="btn-14 mx-2">Главная</Link>
-              <Link href="/duel/history" className="btn-14 mx-2">История дуэлей</Link>
-              <Link href="/leaderboard" className="btn-14 mx-2">Рейтинг</Link>
+          <ul className="hidden md:flex ml-0 lg:ml-2">
+            <li className="flex items-center flex-wrap">
+              <Link href="/" className="btn-14 mx-1 lg:mx-2 text-sm lg:text-base">Главная</Link>
+              <Link href="/duel/history" className="btn-14 mx-1 lg:mx-2 text-sm lg:text-base">История дуэлей</Link>
+              <Link href="/leaderboard" className="btn-14 mx-1 lg:mx-2 text-sm lg:text-base">Рейтинг</Link>
               {isAdmin && (
-                <Link href="/admin" className="px-3 py-2 text-red-400 hover:bg-gray-800 mx-2">Админ-панель</Link>
+                <Link href="/admin" className="px-2 py-1 lg:px-3 lg:py-2 text-sm lg:text-base text-red-400 hover:bg-gray-800 mx-1 lg:mx-2">Админ-панель</Link>
               )}
             </li>
           </ul>
@@ -47,7 +47,7 @@ export default function Navbar() {
         {/* Правая часть хедера */}
         <div className="flex items-center">
           <ul className="flex items-center">
-            <li className="px-1">
+            <li className="hidden sm:block px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Поиск">
                 <svg className="w-5 h-5" viewBox="0 0 16 16" fillRule="evenodd">
                   <title>Поиск</title>
@@ -56,7 +56,7 @@ export default function Navbar() {
                 </svg>
               </button>
             </li>
-            <li className="px-1">
+            <li className="hidden sm:block px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Уведомления">
                 <svg className="w-5 h-5" viewBox="0 0 16 16">
                   <title>Уведомления</title>
@@ -64,7 +64,7 @@ export default function Navbar() {
                 </svg>
               </button>
             </li>
-            <li className="px-1">
+            <li className="hidden sm:block px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Приложения">
                 <svg className="w-5 h-5" viewBox="0 0 16 16">
                   <title>Приложения</title>
@@ -80,7 +80,7 @@ export default function Navbar() {
                 </svg>
               </button>
             </li>
-            <li className="px-1 mr-2">
+            <li className="px-1 mr-1 sm:mr-2">
               {user ? (
                 <div className="relative">
                   <button
@@ -128,16 +128,16 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1 sm:space-x-2">
                   <Link
                     href="/auth/login"
-                    className="px-3 py-2 rounded-md text-sm font-medium text-white border border-gray-600 hover:bg-gray-800"
+                    className="px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium text-white border border-gray-600 hover:bg-gray-800"
                   >
                     Войти
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="px-3 py-2 rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700"
+                    className="px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium bg-blue-600 text-white hover:bg-blue-700"
                   >
                     Регистрация
                   </Link>
@@ -149,24 +149,24 @@ export default function Navbar() {
       </div>
       
       {/* Мобильное меню */}
-      <div className={`md:hidden px-2 pt-2 pb-3 space-y-1 bg-gray-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
+      <div className={`md:hidden w-full px-2 pt-2 pb-3 space-y-1 bg-gray-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
         <Link
           href="/"
-          className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
+          className="block px-3 py-2 rounded-md text-sm sm:text-base font-medium text-white hover:bg-gray-700"
           onClick={toggleMenu}
         >
           Главная
         </Link>
         <Link
           href="/duel/history"
-          className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
+          className="block px-3 py-2 rounded-md text-sm sm:text-base font-medium text-white hover:bg-gray-700"
           onClick={toggleMenu}
         >
           История дуэлей
         </Link>
         <Link
           href="/leaderboard"
-          className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
+          className="block px-3 py-2 rounded-md text-sm sm:text-base font-medium text-white hover:bg-gray-700"
           onClick={toggleMenu}
         >
           Рейтинг
@@ -174,7 +174,7 @@ export default function Navbar() {
         {isAdmin && (
           <Link
             href="/admin"
-            className="block px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-gray-700"
+            className="block px-3 py-2 rounded-md text-sm sm:text-base font-medium text-red-400 hover:bg-gray-700"
             onClick={toggleMenu}
           >
             Админ-панель
@@ -184,7 +184,7 @@ export default function Navbar() {
           <>
             <Link
               href="/profile"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
+              className="block px-3 py-2 rounded-md text-sm sm:text-base font-medium text-white hover:bg-gray-700"
               onClick={toggleMenu}
             >
               Профиль
@@ -194,7 +194,7 @@ export default function Navbar() {
                 toggleMenu();
                 logout();
               }}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
+              className="block w-full text-left px-3 py-2 rounded-md text-sm sm:text-base font-medium text-white hover:bg-gray-700"
             >
               Выйти
             </button>
