@@ -31,7 +31,7 @@ namespace CodeDuelPlatform.Controllers
         /// Получает список всех вопросов (только для администратора)
         /// </summary>
         [HttpGet]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetQuestions(
             [FromQuery] string category = null, 
             [FromQuery] int? difficulty = null,
@@ -57,7 +57,7 @@ namespace CodeDuelPlatform.Controllers
         /// Получает вопрос по ID (только для администратора)
         /// </summary>
         [HttpGet("{id}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetQuestion(int id)
         {
             var question = await _context.Questions.FindAsync(id);
@@ -121,7 +121,7 @@ namespace CodeDuelPlatform.Controllers
         /// Создает новый вопрос с текстовым вводом
         /// </summary>
         [HttpPost("text-input")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTextInputQuestion([FromBody] TextInputQuestionModel model)
         {
             if (!ModelState.IsValid)
@@ -149,7 +149,7 @@ namespace CodeDuelPlatform.Controllers
         /// Создает новый вопрос с выбором вариантов ответов
         /// </summary>
         [HttpPost("multiple-choice")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateMultipleChoiceQuestion([FromBody] MultipleChoiceQuestionModel model)
         {
             if (!ModelState.IsValid)
@@ -184,7 +184,7 @@ namespace CodeDuelPlatform.Controllers
         /// Создает новый вопрос с заполнением пропусков
         /// </summary>
         [HttpPost("fill-blanks")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateFillBlanksQuestion([FromBody] FillBlanksQuestionModel model)
         {
             if (!ModelState.IsValid)
@@ -220,7 +220,7 @@ namespace CodeDuelPlatform.Controllers
         /// Обновляет существующий вопрос (только для администратора)
         /// </summary>
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateQuestion(int id, [FromBody] UpdateQuestionModel model)
         {
             if (!ModelState.IsValid)
@@ -292,7 +292,7 @@ namespace CodeDuelPlatform.Controllers
         /// Удаляет вопрос (только для администратора)
         /// </summary>
         [HttpDelete("{id}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
             var question = await _context.Questions.FindAsync(id);

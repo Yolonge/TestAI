@@ -48,19 +48,22 @@ namespace CodeDuelPlatform.Services
         /// <summary>
         /// Аутентифицирует пользователя
         /// </summary>
-        public async Task<User> AuthenticateUserAsync(string usernameOrEmail, string password)
+        public async Task<(User user, bool isAdmin)> AuthenticateUserAsync(string usernameOrEmail, string password)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == usernameOrEmail || u.Email == usernameOrEmail);
 
             if (user == null)
-                return null;
+                return (null, false);
 
             string passwordHash = HashPassword(password);
             if (user.PasswordHash != passwordHash)
-                return null;
+                return (null, false);
 
-            return user;
+            // Проверка на админа (хардкод для admin/admin)
+            bool isAdmin = user.Username == "admin";
+
+            return (user, isAdmin);
         }
 
         /// <summary>

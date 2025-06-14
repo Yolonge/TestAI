@@ -10,6 +10,15 @@ interface User {
   username: string;
   email: string;
   token: string;
+  isAdmin?: boolean;
+}
+
+interface DecodedToken {
+  exp: number;
+  nameid: string;
+  unique_name: string;
+  email: string;
+  role?: string;
 }
 
 interface AuthContextType {
@@ -18,6 +27,7 @@ interface AuthContextType {
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -37,6 +47,7 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   
   useEffect(() => {
@@ -48,21 +59,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         
         // Проверяем, не истек ли токен
         const token = parsedUser.token;
-        const decodedToken = jwtDecode(token) as { exp: number };
+        const decodedToken = jwtDecode(token) as DecodedToken;
         const currentTime = Date.now() / 1000;
         
         if (decodedToken.exp > currentTime) {
-          setUser(parsedUser);
+          // Проверяем роль админа из токена
+          const isUserAdmin = decodedToken.role === 'Admin';
+          setIsAdmin(isUserAdmin);
+          
+          // Обновляем пользователя с информацией о роли
+          const updatedUser = { 
+            ...parsedUser, 
+            isAdmin: isUserAdmin 
+          };
+          
+          setUser(updatedUser);
           
           // Устанавливаем токен для всех будущих запросов
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         } else {
           // Токен истек, удаляем пользователя
           localStorage.removeItem('user');
+          setIsAdmin(false);
         }
       } catch (error) {
         // Если произошла ошибка при парсинге, удаляем данные пользователя
         localStorage.removeItem('user');
+        setIsAdmin(false);
       }
     }
     setIsLoading(false);
@@ -77,10 +100,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
       
       const userData = response.data;
-      setUser(userData);
+      
+      // Проверяем роль админа из токена
+      const decodedToken = jwtDecode(userData.token) as DecodedToken;
+      const isUserAdmin = decodedToken.role === 'Admin';
+      setIsAdmin(isUserAdmin);
+      
+      // Обновляем пользователя с информацией о роли
+      const updatedUser = { 
+        ...userData, 
+        isAdmin: isUserAdmin 
+      };
+      
+      setUser(updatedUser);
       
       // Сохраняем в localStorage и устанавливаем токен для запросов
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
       
       router.push('/');
@@ -111,13 +146,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     setUser(null);
+    setIsAdmin(false);
     localStorage.removeItem('user');
     delete axios.defaults.headers.common['Authorization'];
     router.push('/auth/login');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isLoading, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

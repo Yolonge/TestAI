@@ -51,12 +51,12 @@ namespace CodeDuelPlatform.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userService.AuthenticateUserAsync(model.UsernameOrEmail, model.Password);
+            var (user, isAdmin) = await _userService.AuthenticateUserAsync(model.UsernameOrEmail, model.Password);
             if (user == null)
                 return Unauthorized(new { Message = "Неверное имя пользователя или пароль" });
 
             // Генерируем JWT токен для пользователя
-            string token = _authService.GenerateJwtToken(user);
+            string token = _authService.GenerateJwtToken(user, isAdmin);
 
             // Возвращаем информацию о пользователе с токеном
             return Ok(new { 

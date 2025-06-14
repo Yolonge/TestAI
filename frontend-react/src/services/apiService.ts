@@ -245,6 +245,88 @@ class ApiService {
     }
   }
 
+  // Получить категории вопросов
+  async getQuestionCategories(): Promise<string[]> {
+    try {
+      const response = await axios.get(`${API_URL}/questions/categories`);
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при получении категорий вопросов:', error);
+      throw error;
+    }
+  }
+
+  // Получить типы вопросов
+  async getQuestionTypes(): Promise<{ id: number; name: string }[]> {
+    try {
+      const response = await axios.get(`${API_URL}/questions/types`);
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при получении типов вопросов:', error);
+      throw error;
+    }
+  }
+
+  // Создать вопрос с текстовым вводом
+  async createTextInputQuestion(questionData: {
+    text: string;
+    correctAnswer: string;
+    category: string;
+    difficulty: number;
+    explanation?: string;
+  }): Promise<any> {
+    try {
+      const response = await axios.post(`${API_URL}/questions/text-input`, questionData, {
+        headers: this.getAuthHeaders()
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при создании вопроса с текстовым вводом:', error);
+      throw error;
+    }
+  }
+
+  // Создать вопрос с выбором вариантов
+  async createMultipleChoiceQuestion(questionData: {
+    text: string;
+    options: string[];
+    correctOptionIndex: number;
+    category: string;
+    difficulty: number;
+    explanation?: string;
+  }): Promise<any> {
+    try {
+      const response = await axios.post(`${API_URL}/questions/multiple-choice`, questionData, {
+        headers: this.getAuthHeaders()
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при создании вопроса с выбором вариантов:', error);
+      throw error;
+    }
+  }
+
+  // Создать вопрос с заполнением пропусков
+  async createFillBlanksQuestion(questionData: {
+    text: string;
+    template: string;
+    blanks: string[];
+    correctAnswer: string;
+    category: string;
+    difficulty: number;
+    explanation?: string;
+  }): Promise<any> {
+    try {
+      const response = await axios.post(`${API_URL}/questions/fill-blanks`, questionData, {
+        headers: this.getAuthHeaders()
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при создании вопроса с заполнением пропусков:', error);
+      throw error;
+    }
+  }
+
   async getDuelStatus(duelId: number): Promise<{ status: string }> {
     try {
       const response = await fetch(`${API_URL}/duels/${duelId}/status`);
