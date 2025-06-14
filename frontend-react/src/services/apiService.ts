@@ -258,6 +258,98 @@ class ApiService {
     }
   }
 
+  // Получение категорий вопросов
+  async getQuestionCategories(): Promise<string[]> {
+    try {
+      const response = await axios.get(`${API_URL}/questions/categories`, {
+        headers: this.getAuthHeaders()
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при получении категорий вопросов:', error);
+      throw error;
+    }
+  }
+
+  // Получение типов вопросов
+  async getQuestionTypes(): Promise<string[]> {
+    try {
+      const response = await axios.get(`${API_URL}/questions/types`, {
+        headers: this.getAuthHeaders()
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при получении типов вопросов:', error);
+      throw error;
+    }
+  }
+
+  // Создание вопроса с текстовым вводом
+  async createTextInputQuestion(questionData: {
+    text: string;
+    correctAnswer: string;
+    category: string;
+    difficulty: number;
+    explanation?: string;
+  }): Promise<any> {
+    try {
+      const response = await axios.post(
+        `${API_URL}/questions/text-input`,
+        questionData,
+        { headers: this.getAuthHeaders() }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при создании вопроса с текстовым вводом:', error);
+      throw error;
+    }
+  }
+
+  // Создание вопроса с множественным выбором
+  async createMultipleChoiceQuestion(questionData: {
+    text: string;
+    options: string[];
+    correctOptionIndex: number;
+    category: string;
+    difficulty: number;
+    explanation?: string;
+  }): Promise<any> {
+    try {
+      const response = await axios.post(
+        `${API_URL}/questions/multiple-choice`,
+        questionData,
+        { headers: this.getAuthHeaders() }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при создании вопроса с множественным выбором:', error);
+      throw error;
+    }
+  }
+
+  // Создание вопроса с заполнением пропусков
+  async createFillBlanksQuestion(questionData: {
+    text: string;
+    template: string;
+    blanks: string[];
+    correctAnswer: string;
+    category: string;
+    difficulty: number;
+    explanation?: string;
+  }): Promise<any> {
+    try {
+      const response = await axios.post(
+        `${API_URL}/questions/fill-blanks`,
+        questionData,
+        { headers: this.getAuthHeaders() }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при создании вопроса с заполнением пропусков:', error);
+      throw error;
+    }
+  }
+
   private getAuthHeaders() {
     try {
       const userJson = localStorage.getItem('user');
