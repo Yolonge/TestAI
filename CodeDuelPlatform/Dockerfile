@@ -17,8 +17,17 @@ RUN dotnet publish "CodeDuelPlatform.csproj" -c Release -o /app/publish /p:UseAp
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
+# Устанавливаем Entity Framework Core CLI и PostgreSQL клиент
+RUN apt-get update && apt-get install -y curl postgresql-client
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 8.0 --install-dir /usr/share/dotnet
+ENV PATH="${PATH}:/usr/share/dotnet"
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
 # Копируем файлы из сборочного образа
 COPY --from=build /app/publish .
+COPY --from=build /src/CodeDuelPlatform/entrypoint.sh .
+RUN chmod +x ./entrypoint.sh
 
 # Устанавливаем переменные среды
 ENV ASPNETCORE_URLS=http://+:80
@@ -28,4 +37,4 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 EXPOSE 80
 
 # Точка входа в приложение
-ENTRYPOINT ["dotnet", "CodeDuelPlatform.dll"] 
+ENTRYPOINT ["./entrypoint.sh"] 
