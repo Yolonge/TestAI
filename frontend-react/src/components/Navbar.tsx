@@ -5,12 +5,14 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Navbar() {
-  const { user, logout, isAdmin } = useAuth();
+  const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const isAdmin = user?.username === 'admin';
 
   return (
     <nav className="navbar bg-gray-900 text-white shadow-md">
