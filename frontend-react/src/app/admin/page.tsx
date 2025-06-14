@@ -174,7 +174,8 @@ export default function AdminPage() {
             correctOptionIndex,
             category,
             difficulty,
-            explanation
+            explanation,
+            correctAnswer: options[correctOptionIndex]
           });
           break;
           

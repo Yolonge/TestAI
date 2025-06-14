@@ -313,6 +313,7 @@ class ApiService {
     category: string;
     difficulty: number;
     explanation?: string;
+    correctAnswer?: string;
   }): Promise<any> {
     try {
       const response = await axios.post(
