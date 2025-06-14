@@ -7,6 +7,8 @@
     depends_on:
       postgres:
         condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
     environment:
       - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=host.docker.internal;Port=5432;Database=testai;
       - ConnectionStrings__RedisConnection=redis:6379,password=redis_password
@@ -15,6 +17,20 @@
     ports:
       - "8080:80"
       - "8081:443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  migrations:
+    image: codeduelplatform
+    build:
+      context: .
+      dockerfile: CodeDuelPlatform/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=5959;Host=host.docker.internal;Port=5432;Database=testai;
+    command: ["--migrate"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

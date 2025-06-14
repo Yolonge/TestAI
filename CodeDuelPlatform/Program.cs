@@ -102,6 +102,25 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+// Проверяем, нужно ли применить миграции
+if (args.Contains("--migrate"))
+{
+    using var scope = app.Services.CreateScope();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        logger.LogInformation("Применение миграций базы данных...");
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
+        logger.LogInformation("Миграции успешно применены.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Ошибка при применении миграций");
+        throw;
+    }
+}
+
 // Настройка pipeline запросов
 if (app.Environment.IsDevelopment())
 {
