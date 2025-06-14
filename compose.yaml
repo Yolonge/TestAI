@@ -7,6 +7,8 @@
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
       migrations:
         condition: service_completed_successfully
     environment:

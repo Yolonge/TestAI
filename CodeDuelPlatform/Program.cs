@@ -8,6 +8,7 @@ using System.Text;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+var isMigrateMode = args.Contains("--migrate");
 
 // Добавляем сервисы в контейнер
 builder.Services.AddControllers();
@@ -18,29 +19,32 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Настройка Redis
-builder.Services.AddSingleton<ConnectionMultiplexer>(sp =>
+// Настройка Redis (пропускаем в режиме миграций)
+if (!isMigrateMode)
 {
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    var redisConnectionString = configuration.GetConnectionString("RedisConnection");
-    return ConnectionMultiplexer.Connect(redisConnectionString);
-});
+    builder.Services.AddSingleton<ConnectionMultiplexer>(sp =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        var redisConnectionString = configuration.GetConnectionString("RedisConnection");
+        return ConnectionMultiplexer.Connect(redisConnectionString);
+    });
 
-// Регистрация сервисов
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<DuelService>();
-builder.Services.AddScoped<QuestionService>();
-builder.Services.AddScoped<QuestionCacheService>();
+    // Регистрация сервисов
+    builder.Services.AddScoped<AuthService>();
+    builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<DuelService>();
+    builder.Services.AddScoped<QuestionService>();
+    builder.Services.AddScoped<QuestionCacheService>();
 
-// Регистрируем RedisService как singleton и как реализацию интерфейса IRedisService
-builder.Services.AddScoped<IRedisService, RedisService>();
+    // Регистрируем RedisService как singleton и как реализацию интерфейса IRedisService
+    builder.Services.AddScoped<IRedisService, RedisService>();
 
-// Добавляем фоновую службу матчмейкинга
-builder.Services.AddHostedService<MatchmakingBackgroundService>();
+    // Добавляем фоновую службу матчмейкинга
+    builder.Services.AddHostedService<MatchmakingBackgroundService>();
 
-// Добавление SignalR
-builder.Services.AddSignalR();
+    // Добавление SignalR
+    builder.Services.AddSignalR();
+}
 
 // Настройка CORS
 builder.Services.AddCors(options =>
@@ -103,7 +107,7 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // Проверяем, нужно ли применить миграции
-if (args.Contains("--migrate"))
+if (isMigrateMode)
 {
     using var scope = app.Services.CreateScope();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
@@ -113,6 +117,9 @@ if (args.Contains("--migrate"))
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         dbContext.Database.Migrate();
         logger.LogInformation("Миграции успешно применены.");
+        
+        // Завершаем работу после применения миграций
+        return;
     }
     catch (Exception ex)
     {
