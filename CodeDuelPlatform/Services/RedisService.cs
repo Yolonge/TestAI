@@ -915,7 +915,9 @@ namespace CodeDuelPlatform.Services
                         dbDuel.IsDraw = false;
                         dbDuel.FirstUser.TotalWins++;
                         dbDuel.SecondUser.TotalLosses++;
-                        _logger.LogInformation($"Победил первый игрок с ID {dbDuel.FirstUserId}, правильных ответов: {dbDuel.FirstUserCorrectAnswers} vs {dbDuel.SecondUserCorrectAnswers}");
+                        // Добавляем 25 очков рейтинга победителю
+                        dbDuel.FirstUser.Rating += 25;
+                        _logger.LogInformation($"Победил первый игрок с ID {dbDuel.FirstUserId}, правильных ответов: {dbDuel.FirstUserCorrectAnswers} vs {dbDuel.SecondUserCorrectAnswers}. Рейтинг повышен на 25 очков.");
                     }
                     else if (dbDuel.SecondUserCorrectAnswers > dbDuel.FirstUserCorrectAnswers)
                     {
@@ -923,7 +925,9 @@ namespace CodeDuelPlatform.Services
                         dbDuel.IsDraw = false;
                         dbDuel.SecondUser.TotalWins++;
                         dbDuel.FirstUser.TotalLosses++;
-                        _logger.LogInformation($"Победил второй игрок с ID {dbDuel.SecondUserId}, правильных ответов: {dbDuel.SecondUserCorrectAnswers} vs {dbDuel.FirstUserCorrectAnswers}");
+                        // Добавляем 25 очков рейтинга победителю
+                        dbDuel.SecondUser.Rating += 25;
+                        _logger.LogInformation($"Победил второй игрок с ID {dbDuel.SecondUserId}, правильных ответов: {dbDuel.SecondUserCorrectAnswers} vs {dbDuel.FirstUserCorrectAnswers}. Рейтинг повышен на 25 очков.");
                     }
                     else
                     {
@@ -1007,8 +1011,10 @@ namespace CodeDuelPlatform.Services
                                 {
                                     duel.FirstUser.TotalWins++;
                                     duel.SecondUser.TotalLosses++;
+                                    // Добавляем 25 очков рейтинга победителю
+                                    duel.FirstUser.Rating += 25;
                                 }
-                                _logger.LogInformation($"Дуэль ID: {duel.Id} завершена. Победил первый игрок с ID {duel.FirstUserId}, счет: {duel.FirstUserCorrectAnswers}:{duel.SecondUserCorrectAnswers}");
+                                _logger.LogInformation($"Дуэль ID: {duel.Id} завершена. Победил первый игрок с ID {duel.FirstUserId}, счет: {duel.FirstUserCorrectAnswers}:{duel.SecondUserCorrectAnswers}. Рейтинг повышен на 25 очков.");
                             }
                             else if (duel.SecondUserCorrectAnswers > duel.FirstUserCorrectAnswers)
                             {
@@ -1018,8 +1024,10 @@ namespace CodeDuelPlatform.Services
                                 {
                                     duel.SecondUser.TotalWins++;
                                     duel.FirstUser.TotalLosses++;
+                                    // Добавляем 25 очков рейтинга победителю
+                                    duel.SecondUser.Rating += 25;
                                 }
-                                _logger.LogInformation($"Дуэль ID: {duel.Id} завершена. Победил второй игрок с ID {duel.SecondUserId}, счет: {duel.SecondUserCorrectAnswers}:{duel.FirstUserCorrectAnswers}");
+                                _logger.LogInformation($"Дуэль ID: {duel.Id} завершена. Победил второй игрок с ID {duel.SecondUserId}, счет: {duel.SecondUserCorrectAnswers}:{duel.FirstUserCorrectAnswers}. Рейтинг повышен на 25 очков.");
                             }
                             else
                             {
