@@ -33,12 +33,11 @@ export default function Navbar() {
 
   return (
     <nav className="navbar bg-gray-900 text-white shadow-md">
-      <div className="flex flex-wrap justify-between">
-        {/* Левая часть хедера */}
-        <div className="flex items-center space-x-1 sm:space-x-2">
-          {/* Кнопка бургер только для мобильных */}
+      <div className="flex flex-wrap justify-between items-center relative">
+        {/* Мобильная версия навбара */}
+        <div className="md:hidden flex w-full items-center justify-between">
           <button 
-            className="md:hidden p-2 sm:p-3 hover:bg-gray-800" 
+            className="p-2 sm:p-3 hover:bg-gray-800" 
             type="button" 
             onClick={toggleMenu} 
             aria-label="Меню приложения"
@@ -48,14 +47,47 @@ export default function Navbar() {
               <path d="M0 0h20v2H0zm0 6h20v2H0zm0 6h20v2H0z" />
             </svg>
           </button>
-          
-          <Link href="/" className="flex items-center py-2 px-2 sm:py-3 sm:px-4 flex-shrink-0 md:ml-0 ml-auto mr-auto">
+
+          <div className="absolute left-0 right-0 mx-auto w-fit">
+            <Link href="/" className="flex items-center py-2 px-2 sm:py-3 sm:px-4">
+              <h4 className="logo-title">
+                <span>DealW/</span>
+              </h4>
+            </Link>
+          </div>
+
+          {user ? (
+            <button
+              onClick={toggleMenu}
+              className="flex items-center p-2 rounded-full hover:bg-gray-800"
+              aria-label="Профиль пользователя"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24">
+                <title>Пользователь</title>
+                <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 4.6c2.8 0 5 2.2 5 5s-2.2 5-5 5-5-2.2-5-5 2.2-5 5-5zm7 14.5c-1.8 1.8-4.3 2.9-7 2.9s-5.2-1.1-7-2.9v-1.6c0-1.3.7-2 2-2h10c1.3 0 2 .7 2 2v1.6z" />
+              </svg>
+            </button>
+          ) : (
+            <div className="flex items-center space-x-1">
+              <Link
+                href="/auth/login"
+                className="px-2 py-1 rounded-md text-xs font-medium text-white border border-gray-600 hover:bg-gray-800"
+              >
+                Войти
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Десктопная версия навбара */}
+        <div className="hidden md:flex items-center space-x-1 sm:space-x-2">
+          <Link href="/" className="flex items-center py-2 px-2 sm:py-3 sm:px-4 flex-shrink-0">
             <h4 className="logo-title">
               <span>DealW/</span>
             </h4>
           </Link>
           
-          <ul className="hidden md:flex ml-0 lg:ml-2">
+          <ul className="flex ml-0 lg:ml-2">
             <li className="flex items-center flex-wrap">
               <Link href="/" className="btn-14 mx-1 lg:mx-2 text-sm lg:text-base">Главная</Link>
               <Link href="/duel/history" className="btn-14 mx-1 lg:mx-2 text-sm lg:text-base">История дуэлей</Link>
@@ -67,10 +99,10 @@ export default function Navbar() {
           </ul>
         </div>
         
-        {/* Правая часть хедера */}
-        <div className="flex items-center">
+        {/* Правая часть хедера - только для десктопа */}
+        <div className="hidden md:flex items-center">
           <ul className="flex items-center">
-            <li className="hidden sm:block px-1">
+            <li className="px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Поиск">
                 <svg className="w-5 h-5" viewBox="0 0 16 16" fillRule="evenodd">
                   <title>Поиск</title>
@@ -79,7 +111,7 @@ export default function Navbar() {
                 </svg>
               </button>
             </li>
-            <li className="hidden sm:block px-1">
+            <li className="px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Уведомления">
                 <svg className="w-5 h-5" viewBox="0 0 16 16">
                   <title>Уведомления</title>
@@ -87,7 +119,7 @@ export default function Navbar() {
                 </svg>
               </button>
             </li>
-            <li className="hidden sm:block px-1">
+            <li className="px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Приложения">
                 <svg className="w-5 h-5" viewBox="0 0 16 16">
                   <title>Приложения</title>
