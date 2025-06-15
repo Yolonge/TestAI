@@ -1,12 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Функция для определения мобильного устройства
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768); // 768px - стандартная точка для md в Tailwind
+    };
+
+    // Проверяем при загрузке
+    checkIsMobile();
+
+    // Добавляем слушатель изменения размера окна
+    window.addEventListener('resize', checkIsMobile);
+
+    // Очищаем слушатель при размонтировании
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -19,14 +36,20 @@ export default function Navbar() {
       <div className="flex flex-wrap justify-between">
         {/* Левая часть хедера */}
         <div className="flex items-center space-x-1 sm:space-x-2">
-          <button className="p-2 sm:p-3 hover:bg-gray-800" type="button" onClick={toggleMenu} aria-label="Меню приложения">
+          {/* Кнопка бургер только для мобильных */}
+          <button 
+            className="md:hidden p-2 sm:p-3 hover:bg-gray-800" 
+            type="button" 
+            onClick={toggleMenu} 
+            aria-label="Меню приложения"
+          >
             <svg className="w-5 h-5" fill="currentColor" fillRule="evenodd" viewBox="0 0 20 20">
               <title>Меню</title>
               <path d="M0 0h20v2H0zm0 6h20v2H0zm0 6h20v2H0z" />
             </svg>
           </button>
           
-          <Link href="/" className="flex items-center py-2 px-2 sm:py-3 sm:px-4 flex-shrink-0">
+          <Link href="/" className="flex items-center py-2 px-2 sm:py-3 sm:px-4 flex-shrink-0 md:ml-0 ml-auto mr-auto">
             <h4 className="logo-title">
               <span>DealW/</span>
             </h4>
@@ -94,7 +117,8 @@ export default function Navbar() {
                     </svg>
                   </button>
                   
-                  {isMenuOpen && (
+                  {/* Выпадающее окно только для ПК */}
+                  {isMenuOpen && !isMobile && (
                     <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-10">
                       <div className="px-4 py-2 text-sm font-medium border-b border-gray-700">
                         {user.username}
