@@ -220,10 +220,11 @@ export default function DuelResultsPage() {
                               : 'bg-red-100 text-red-800'
                           }`}>
                             {question.questionType === 'FillBlanks' && userAnswer ? (
-                              <div>
+                              <div className="space-y-1">
                                 {userAnswer.split(';').map((value, idx) => (
-                                  <div key={idx} className="mb-1">
-                                    <span className="font-medium">{question.blanks?.[idx] || `Пропуск ${idx + 1}`}:</span> {value}
+                                  <div key={idx} className="flex items-start">
+                                    <span className="font-medium mr-2 whitespace-nowrap">Пропуск {idx + 1} ({question.blanks?.[idx] || ''}): </span>
+                                    <span className="break-all">{value || '-'}</span>
                                   </div>
                                 ))}
                               </div>
@@ -244,10 +245,11 @@ export default function DuelResultsPage() {
                               : 'bg-red-100 text-red-800'
                           }`}>
                             {question.questionType === 'FillBlanks' && opponentAnswer ? (
-                              <div>
+                              <div className="space-y-1">
                                 {opponentAnswer.split(';').map((value, idx) => (
-                                  <div key={idx} className="mb-1">
-                                    <span className="font-medium">{question.blanks?.[idx] || `Пропуск ${idx + 1}`}:</span> {value}
+                                  <div key={idx} className="flex items-start">
+                                    <span className="font-medium mr-2 whitespace-nowrap">Пропуск {idx + 1} ({question.blanks?.[idx] || ''}): </span>
+                                    <span className="break-all">{value || '-'}</span>
                                   </div>
                                 ))}
                               </div>
