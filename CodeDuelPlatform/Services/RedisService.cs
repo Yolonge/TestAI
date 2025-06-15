@@ -896,6 +896,13 @@ namespace CodeDuelPlatform.Services
                         throw new Exception("Не найдены участники дуэли");
                     }
                     
+                    // Проверяем, не завершена ли уже дуэль
+                    if (dbDuel.IsCompleted)
+                    {
+                        _logger.LogInformation($"Дуэль {duelId} уже завершена, пропускаем обработку");
+                        return;
+                    }
+                    
                     // Получаем дуэль из Redis, если она там есть
                     var redisDuel = await GetActiveDuelAsync(duelId);
                     if (redisDuel != null)
@@ -998,6 +1005,13 @@ namespace CodeDuelPlatform.Services
                         else
                         {
                             // Если дуэли нет в Redis, завершаем её с использованием данных из базы данных
+                            // Проверяем, не завершена ли уже дуэль
+                            if (duel.IsCompleted)
+                            {
+                                _logger.LogInformation($"Дуэль ID: {duel.Id} уже завершена, пропускаем обработку");
+                                continue;
+                            }
+                            
                             duel.EndTime = DateTime.UtcNow;
                             duel.IsCompleted = true;
                             duel.Status = "completed";
