@@ -38,10 +38,12 @@ export interface Duel {
 
 export interface DuelResult {
   id: number;
-  firstUser: { id: number; username: string };
-  secondUser: { id: number; username: string };
+  firstUser?: { id: number; username: string };
+  secondUser?: { id: number; username: string };
+  firstUserId: number;
+  secondUserId: number;
   startTime: string;
-  endTime: string;
+  endTime?: string;
   winnerId: number | null;
   isDraw: boolean;
   firstUserCorrectAnswers: number;

@@ -113,7 +113,7 @@ export default function DuelResultsPage() {
             <div className="flex justify-center items-center space-x-12">
               <div className="text-center">
                 <p className="text-lg font-medium text-gray-800">
-                  {user?.id && duelResult.firstUser?.id ? (user.id === duelResult.firstUser.id ? 'Вы' : duelResult.firstUser.username) : 'Игрок 1'}
+                  {user?.id && user.id === duelResult.firstUserId ? 'Вы' : (duelResult.firstUser?.username || 'Игрок 1')}
                 </p>
                 <p className={`text-4xl font-bold ${duelResult.firstUserCorrectAnswers > duelResult.secondUserCorrectAnswers ? 'text-green-600' : 'text-gray-900'}`}>
                   {duelResult.firstUserCorrectAnswers}
@@ -124,7 +124,7 @@ export default function DuelResultsPage() {
               
               <div className="text-center">
                 <p className="text-lg font-medium text-gray-800">
-                  {user?.id && duelResult.secondUser?.id ? (user.id === duelResult.secondUser.id ? 'Вы' : duelResult.secondUser.username) : 'Игрок 2'}
+                  {user?.id && user.id === duelResult.secondUserId ? 'Вы' : (duelResult.secondUser?.username || 'Игрок 2')}
                 </p>
                 <p className={`text-4xl font-bold ${duelResult.secondUserCorrectAnswers > duelResult.firstUserCorrectAnswers ? 'text-green-600' : 'text-gray-900'}`}>
                   {duelResult.secondUserCorrectAnswers}
@@ -139,7 +139,10 @@ export default function DuelResultsPage() {
             
             <div className="space-y-8">
               {duelResult.questions.map((question, index) => {
-                const isUserFirst = user?.id && duelResult.firstUser?.id ? user.id === duelResult.firstUser.id : false;
+                // Определяем, является ли текущий пользователь первым игроком
+                const isUserFirst = user?.id ? user.id === duelResult.firstUserId : false;
+                
+                // Определяем ответы и их правильность в зависимости от того, кто текущий пользователь
                 const userAnswer = isUserFirst ? question.firstUserAnswer : question.secondUserAnswer;
                 const isUserCorrect = isUserFirst ? question.isFirstUserAnswerCorrect : question.isSecondUserAnswerCorrect;
                 const opponentAnswer = isUserFirst ? question.secondUserAnswer : question.firstUserAnswer;
@@ -200,7 +203,7 @@ export default function DuelResultsPage() {
                           }`}>
                             {userAnswer || 'Нет ответа'}
                             {isUserCorrect && (
-                              <span className="ml-2" key={`user-correct-${question.id}`}>✓</span>
+                              <span className="ml-2">✓</span>
                             )}
                           </div>
                         </div>
@@ -214,7 +217,7 @@ export default function DuelResultsPage() {
                           }`}>
                             {opponentAnswer || 'Нет ответа'}
                             {isOpponentCorrect && (
-                              <span className="ml-2" key={`opponent-correct-${question.id}`}>✓</span>
+                              <span className="ml-2">✓</span>
                             )}
                           </div>
                         </div>
