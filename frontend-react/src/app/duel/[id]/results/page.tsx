@@ -27,23 +27,6 @@ export default function DuelResultsPage() {
       try {
         setLoading(true);
         const result = await apiService.getDuelResults(duelId, user.id);
-        
-        // Добавляем отладочную информацию в консоль
-        console.log('Loaded duel results:', result);
-        console.log('Current user ID:', user.id);
-        console.log('Is user first:', user.id === result.firstUser?.id);
-        
-        // Проверяем и исправляем данные, если они некорректны
-        if (result.questions && result.questions.length > 0) {
-          result.questions = result.questions.map(q => {
-            // Если id вопроса отсутствует, генерируем уникальный id
-            if (!q.id) {
-              q.id = parseInt(Math.random().toString().substring(2, 10));
-            }
-            return q;
-          });
-        }
-        
         setDuelResult(result);
       } catch (err) {
         console.error('Ошибка при загрузке результатов дуэли:', err);
@@ -156,47 +139,14 @@ export default function DuelResultsPage() {
             
             <div className="space-y-8">
               {duelResult.questions.map((question, index) => {
-                // Определяем, является ли текущий пользователь первым или вторым игроком
-                const isUserFirst = user?.id === duelResult.firstUser?.id;
-                const isUserSecond = user?.id === duelResult.secondUser?.id;
-                
-                // Определяем ответы и правильность для текущего пользователя
-                let userAnswer = '';
-                let isUserCorrect = false;
-                
-                // Определяем ответы и правильность для оппонента
-                let opponentAnswer = '';
-                let isOpponentCorrect = false;
-                
-                // Устанавливаем значения в зависимости от того, какой пользователь просматривает результаты
-                if (isUserFirst) {
-                  userAnswer = question.firstUserAnswer || 'Нет ответа';
-                  isUserCorrect = question.isFirstUserAnswerCorrect === true;
-                  opponentAnswer = question.secondUserAnswer || 'Нет ответа';
-                  isOpponentCorrect = question.isSecondUserAnswerCorrect === true;
-                } else if (isUserSecond) {
-                  userAnswer = question.secondUserAnswer || 'Нет ответа';
-                  isUserCorrect = question.isSecondUserAnswerCorrect === true;
-                  opponentAnswer = question.firstUserAnswer || 'Нет ответа';
-                  isOpponentCorrect = question.isFirstUserAnswerCorrect === true;
-                }
-                
-                // Выводим отладочную информацию в консоль для этого вопроса
-                console.log(`Question ${index + 1}:`, {
-                  isUserFirst,
-                  isUserSecond,
-                  firstUserAnswer: question.firstUserAnswer,
-                  secondUserAnswer: question.secondUserAnswer,
-                  isFirstUserAnswerCorrect: question.isFirstUserAnswerCorrect,
-                  isSecondUserAnswerCorrect: question.isSecondUserAnswerCorrect,
-                  userAnswer,
-                  isUserCorrect,
-                  opponentAnswer,
-                  isOpponentCorrect
-                });
+                const isUserFirst = user?.id && duelResult.firstUser?.id ? user.id === duelResult.firstUser.id : false;
+                const userAnswer = isUserFirst ? question.firstUserAnswer : question.secondUserAnswer;
+                const isUserCorrect = isUserFirst ? question.isFirstUserAnswerCorrect : question.isSecondUserAnswerCorrect;
+                const opponentAnswer = isUserFirst ? question.secondUserAnswer : question.firstUserAnswer;
+                const isOpponentCorrect = isUserFirst ? question.isSecondUserAnswerCorrect : question.isFirstUserAnswerCorrect;
                 
                 return (
-                  <div key={question.id || index} className="border rounded-lg overflow-hidden">
+                  <div key={question.id} className="border rounded-lg overflow-hidden">
                     <div className="bg-gray-50 p-4 border-b">
                       <h3 className="font-bold text-gray-900">Вопрос {index + 1}</h3>
                     </div>
@@ -248,9 +198,9 @@ export default function DuelResultsPage() {
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-red-100 text-red-800'
                           }`}>
-                            {userAnswer}
+                            {userAnswer || 'Нет ответа'}
                             {isUserCorrect && (
-                              <span className="ml-2">✓</span>
+                              <span className="ml-2" key={`user-correct-${question.id}`}>✓</span>
                             )}
                           </div>
                         </div>
@@ -262,9 +212,9 @@ export default function DuelResultsPage() {
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-red-100 text-red-800'
                           }`}>
-                            {opponentAnswer}
+                            {opponentAnswer || 'Нет ответа'}
                             {isOpponentCorrect && (
-                              <span className="ml-2">✓</span>
+                              <span className="ml-2" key={`opponent-correct-${question.id}`}>✓</span>
                             )}
                           </div>
                         </div>
