@@ -108,9 +108,10 @@ namespace CodeDuelPlatform.Services
             string explanation = null)
         {
             // Создаем JSON структуру для данных с пропусками
+            // Сохраняем шаблон как есть, чтобы сохранить форматирование
             var blanksData = new
             {
-                template = template,
+                template = template, // Шаблон с сохранением форматирования
                 blanks = blanks
             };
             

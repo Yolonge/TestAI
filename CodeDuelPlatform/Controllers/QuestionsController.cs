@@ -196,6 +196,11 @@ namespace CodeDuelPlatform.Controllers
             if (model.Blanks == null || model.Blanks.Count == 0)
                 return BadRequest(new { Message = "Необходимо указать хотя бы один пропуск" });
             
+            // Проверяем, что количество пропусков соответствует количеству заполнителей в шаблоне
+            int placeholderCount = CountPlaceholders(model.Template);
+            if (placeholderCount != model.Blanks.Count)
+                return BadRequest(new { Message = $"Количество пропусков ({model.Blanks.Count}) не соответствует количеству заполнителей в шаблоне ({placeholderCount})" });
+            
             try
             {
                 var question = await _questionService.CreateFillBlanksQuestionAsync(
@@ -208,12 +213,32 @@ namespace CodeDuelPlatform.Controllers
                     model.Explanation
                 );
             
-            return CreatedAtAction(nameof(GetQuestion), new { id = question.Id }, question);
+                return CreatedAtAction(nameof(GetQuestion), new { id = question.Id }, question);
             }
             catch (Exception ex)
             {
                 return BadRequest(new { Message = $"Ошибка при создании вопроса: {ex.Message}" });
             }
+        }
+
+        // Вспомогательный метод для подсчета заполнителей в шаблоне
+        private int CountPlaceholders(string template)
+        {
+            if (string.IsNullOrEmpty(template))
+                return 0;
+            
+            // Считаем количество заполнителей "__" в шаблоне
+            // Учитываем, что они могут быть на разных строках
+            int count = 0;
+            int index = 0;
+            
+            while ((index = template.IndexOf("__", index)) != -1)
+            {
+                count++;
+                index += 2; // Перемещаем индекс после найденного заполнителя
+            }
+            
+            return count;
         }
 
         /// <summary>

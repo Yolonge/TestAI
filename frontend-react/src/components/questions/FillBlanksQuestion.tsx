@@ -34,30 +34,55 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
   const renderTemplate = () => {
     if (!question.template) return null;
     
-    let parts = question.template.split('__');
-    let result = [];
+    // Разбиваем шаблон на строки для сохранения переносов строк
+    const lines = question.template.split('\n');
+    const result: React.ReactNode[] = [];
+    let blankIndex = 0;
     
-    for (let i = 0; i < parts.length; i++) {
-      // Добавляем текст части шаблона
-      result.push(<span key={`part-${i}`} className="text-sm sm:text-base">{parts[i]}</span>);
+    // Обрабатываем каждую строку отдельно
+    lines.forEach((line, lineIndex) => {
+      const parts = line.split('__');
+      const lineElements: React.ReactNode[] = [];
       
-      // Добавляем поле ввода после каждой части, кроме последней
-      if (i < parts.length - 1) {
-        result.push(
-          <input
-            key={`input-${i}`}
-            type="text"
-            className="mx-1 p-1 border border-gray-300 rounded w-16 sm:w-24 text-center text-xs sm:text-sm"
-            value={blankValues[i] || ''}
-            onChange={(e) => handleBlankChange(i, e.target.value)}
-            disabled={submitted || loading || timeLeft === 0}
-            placeholder={question.blanks?.[i] || '...'}
-          />
+      // Обрабатываем части строки
+      for (let i = 0; i < parts.length; i++) {
+        // Добавляем текст части шаблона с сохранением отступов
+        lineElements.push(
+          <span key={`part-${lineIndex}-${i}`} className="whitespace-pre">
+            {parts[i]}
+          </span>
         );
+        
+        // Добавляем поле ввода после каждой части, кроме последней
+        if (i < parts.length - 1) {
+          lineElements.push(
+            <input
+              key={`input-${lineIndex}-${i}`}
+              type="text"
+              className="mx-1 p-1 border border-gray-300 rounded w-16 sm:w-24 text-center text-xs sm:text-sm bg-white"
+              value={blankValues[blankIndex] || ''}
+              onChange={(e) => handleBlankChange(blankIndex, e.target.value)}
+              disabled={submitted || loading || timeLeft === 0}
+              placeholder={question.blanks?.[blankIndex] || '...'}
+            />
+          );
+          blankIndex++;
+        }
       }
-    }
+      
+      // Добавляем строку с элементами
+      result.push(
+        <div key={`line-${lineIndex}`} className="flex flex-wrap items-center">
+          {lineElements}
+        </div>
+      );
+    });
     
-    return <div className="bg-gray-100 p-3 sm:p-4 rounded-lg font-mono text-base sm:text-lg mb-3 sm:mb-4 text-gray-800 overflow-x-auto">{result}</div>;
+    return (
+      <div className="bg-gray-100 p-3 sm:p-4 rounded-lg font-mono text-base sm:text-lg mb-3 sm:mb-4 text-gray-800 overflow-x-auto">
+        <div className="whitespace-pre-wrap">{result}</div>
+      </div>
+    );
   };
 
   return (

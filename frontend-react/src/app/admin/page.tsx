@@ -434,13 +434,17 @@ export default function AdminPage() {
                 </label>
                 <textarea
                   id="template"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono"
                   value={template}
                   onChange={(e) => setTemplate(e.target.value)}
                   required
-                  rows={3}
-                  placeholder="Пример: n = Convert.ToInt32(__);"
+                  rows={5}
+                  placeholder="Пример: def sum_two_smallest(numbers): return __(__(__)[:])"
+                  style={{ whiteSpace: 'pre', tabSize: 4 }}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Используйте пробелы для отступов. Переносы строк и табуляция будут сохранены.
+                </p>
               </div>
               
               <div className="mb-4">
