@@ -260,56 +260,6 @@ export default function DuelResultsPage() {
                           </div>
                         </div>
                       </div>
-                      
-                      <div className="mt-4 p-4 bg-blue-50 rounded">
-                        <p className="font-semibold mb-2 text-gray-900">Правильный ответ:</p>
-                        {question.questionType === 'FillBlanks' && question.correctAnswer ? (
-                          <>
-                            <div className="text-blue-800 font-medium mb-3">
-                              {question.correctAnswer.split(';').map((value, idx) => (
-                                <div key={idx} className="mb-1">
-                                  <span className="font-medium">{question.blanks?.[idx] || `Пропуск ${idx + 1}`}:</span> {value}
-                                </div>
-                              ))}
-                            </div>
-                            
-                            {/* Отображение кода с подставленными правильными ответами */}
-                            <div className="mt-3">
-                              <p className="font-semibold mb-1 text-gray-900">Код с правильными ответами:</p>
-                              <pre className="block p-2 bg-blue-50 border border-blue-200 rounded font-mono text-blue-900 overflow-x-auto whitespace-pre-wrap">
-                                {question.template && question.correctAnswer && question.template.split('\n').map((line, lineIndex) => {
-                                  const parts = line.split('__');
-                                  const correctValues = question.correctAnswer ? question.correctAnswer.split(';') : [];
-                                  
-                                  return (
-                                    <div key={lineIndex} className="whitespace-pre">
-                                      {parts.map((part, partIndex) => (
-                                        <React.Fragment key={`part-${lineIndex}-${partIndex}`}>
-                                          {part}
-                                          {partIndex < parts.length - 1 && (
-                                            <span className="bg-green-100 px-1 py-0.5 rounded mx-1 text-green-800 font-bold">
-                                              {correctValues[partIndex] || ''}
-                                            </span>
-                                          )}
-                                        </React.Fragment>
-                                      ))}
-                                    </div>
-                                  );
-                                })}
-                              </pre>
-                            </div>
-                          </>
-                        ) : (
-                          <p className="text-blue-800 font-medium">{question.correctAnswer}</p>
-                        )}
-                        
-                        {question.explanation && (
-                          <div className="mt-2">
-                            <p className="font-semibold mb-1 text-gray-900">Пояснение:</p>
-                            <p className="text-gray-800">{question.explanation}</p>
-                          </div>
-                        )}
-                      </div>
                     </div>
                   </div>
                 );
