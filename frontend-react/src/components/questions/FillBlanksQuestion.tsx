@@ -55,15 +55,20 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
         
         // Добавляем поле ввода после каждой части, кроме последней
         if (i < parts.length - 1) {
+          const currentBlankIndex = blankIndex;
+          const placeholder = question.blanks?.[currentBlankIndex] || '...';
+          
           lineElements.push(
             <input
               key={`input-${lineIndex}-${i}`}
               type="text"
-              className="mx-1 p-1 border border-gray-300 rounded w-16 sm:w-24 text-center text-xs sm:text-sm bg-white"
-              value={blankValues[blankIndex] || ''}
-              onChange={(e) => handleBlankChange(blankIndex, e.target.value)}
+              className="mx-1 p-1 border border-gray-300 rounded w-20 sm:w-28 text-center text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={blankValues[currentBlankIndex] || ''}
+              onChange={(e) => handleBlankChange(currentBlankIndex, e.target.value)}
               disabled={submitted || loading || timeLeft === 0}
-              placeholder={question.blanks?.[blankIndex] || '...'}
+              placeholder={placeholder}
+              title={placeholder}
+              aria-label={`Введите ${placeholder}`}
             />
           );
           blankIndex++;
@@ -93,37 +98,19 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
           
           {renderTemplate()}
           
-          <div className="mt-4 sm:mt-6">
-            {question.blanks?.map((blank, index) => (
-              <div key={index} className="mb-2 sm:mb-3">
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                  {blank}:
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-1.5 sm:p-2 border border-gray-300 rounded-md text-xs sm:text-sm"
-                  value={blankValues[index] || ''}
-                  onChange={(e) => handleBlankChange(index, e.target.value)}
-                  disabled={submitted || loading || timeLeft === 0}
-                  placeholder={`Введите ${blank}`}
-                />
-              </div>
-            ))}
+          <div className="flex justify-center mt-6">
+            <button
+              type="submit"
+              className={`py-2 px-4 sm:py-3 sm:px-8 rounded-lg text-white font-bold text-sm sm:text-base ${
+                blankValues.some(val => !val.trim()) || submitted || loading || timeLeft === 0
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+              disabled={blankValues.some(val => !val.trim()) || submitted || loading || timeLeft === 0}
+            >
+              {loading ? 'Отправка...' : submitted ? 'Ответ отправлен' : 'Отправить ответ'}
+            </button>
           </div>
-        </div>
-        
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className={`py-2 px-4 sm:py-3 sm:px-8 rounded-lg text-white font-bold text-sm sm:text-base ${
-              blankValues.some(val => !val.trim()) || submitted || loading || timeLeft === 0
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
-            }`}
-            disabled={blankValues.some(val => !val.trim()) || submitted || loading || timeLeft === 0}
-          >
-            {loading ? 'Отправка...' : submitted ? 'Ответ отправлен' : 'Отправить ответ'}
-          </button>
         </div>
       </form>
     </QuestionBase>

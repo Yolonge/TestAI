@@ -444,12 +444,13 @@ export default function AdminPage() {
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Используйте пробелы для отступов. Переносы строк и табуляция будут сохранены.
+                  Каждый символ __ будет заменен на поле ввода.
                 </p>
               </div>
               
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Значения для пропусков
+                  Значения для пропусков (названия полей)
                 </label>
                 {blanks.map((blank, index) => (
                   <div key={index} className="flex gap-2 mb-2">
@@ -459,7 +460,7 @@ export default function AdminPage() {
                       value={blank}
                       onChange={(e) => handleBlankChange(index, e.target.value)}
                       required
-                      placeholder={`Значение ${index + 1}`}
+                      placeholder={`Название поля ${index + 1}`}
                     />
                     <button
                       type="button"
@@ -478,6 +479,9 @@ export default function AdminPage() {
                 >
                   Добавить пропуск
                 </button>
+                <p className="text-xs text-gray-500 mt-1">
+                  Количество полей должно совпадать с количеством пропусков __ в шаблоне.
+                </p>
               </div>
               
               <div className="mb-4">
@@ -492,6 +496,9 @@ export default function AdminPage() {
                   onChange={(e) => setFillBlanksAnswer(e.target.value)}
                   required
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Укажите правильный ответ в формате "значение1;значение2;значение3" (через точку с запятой).
+                </p>
               </div>
             </>
           )}

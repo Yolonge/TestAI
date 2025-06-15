@@ -202,9 +202,35 @@ namespace CodeDuelPlatform.Services
         private bool CheckFillBlanksAnswer(Question question, string userAnswer)
         {
             // Для вопроса с заполнением пропусков
-            // Сравниваем с правильным ответом
-            return string.Equals(question.CorrectAnswer.Trim(), userAnswer.Trim(), 
-                StringComparison.OrdinalIgnoreCase);
+            if (string.IsNullOrEmpty(userAnswer))
+                return false;
+            
+            // Проверяем точное совпадение (для обратной совместимости)
+            if (string.Equals(question.CorrectAnswer.Trim(), userAnswer.Trim(), StringComparison.OrdinalIgnoreCase))
+                return true;
+            
+            // Если ответ содержит разделитель ";" - разбиваем на части и проверяем каждую
+            if (userAnswer.Contains(';') && question.CorrectAnswer.Contains(';'))
+            {
+                var userValues = userAnswer.Split(';').Select(v => v.Trim()).ToArray();
+                var correctValues = question.CorrectAnswer.Split(';').Select(v => v.Trim()).ToArray();
+                
+                // Если количество значений не совпадает, ответ неверный
+                if (userValues.Length != correctValues.Length)
+                    return false;
+                
+                // Проверяем каждое значение
+                for (int i = 0; i < userValues.Length; i++)
+                {
+                    if (!string.Equals(userValues[i], correctValues[i], StringComparison.OrdinalIgnoreCase))
+                        return false;
+                }
+                
+                return true;
+            }
+            
+            // Если формат не соответствует ожидаемому, используем обычное сравнение
+            return false;
         }
     }
 } 
