@@ -223,7 +223,7 @@ export default function DuelResultsPage() {
                               <div className="space-y-1">
                                 {userAnswer.split(';').map((value, idx) => (
                                   <div key={idx} className="flex items-start">
-                                    <span className="font-medium mr-2 whitespace-nowrap">Пропуск {idx + 1} ({question.blanks?.[idx] || ''}): </span>
+                                    <span className="font-medium mr-2 whitespace-nowrap">Пропуск {idx + 1}: </span>
                                     <span className="break-all">{value || '-'}</span>
                                   </div>
                                 ))}
@@ -248,7 +248,7 @@ export default function DuelResultsPage() {
                               <div className="space-y-1">
                                 {opponentAnswer.split(';').map((value, idx) => (
                                   <div key={idx} className="flex items-start">
-                                    <span className="font-medium mr-2 whitespace-nowrap">Пропуск {idx + 1} ({question.blanks?.[idx] || ''}): </span>
+                                    <span className="font-medium mr-2 whitespace-nowrap">Пропуск {idx + 1}: </span>
                                     <span className="break-all">{value || '-'}</span>
                                   </div>
                                 ))}

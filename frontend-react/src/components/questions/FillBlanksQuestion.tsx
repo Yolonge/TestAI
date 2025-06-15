@@ -56,7 +56,6 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
         // Добавляем поле ввода после каждой части, кроме последней
         if (i < parts.length - 1) {
           const currentBlankIndex = blankIndex;
-          const placeholder = question.blanks?.[currentBlankIndex] || '...';
           
           lineElements.push(
             <input
@@ -66,9 +65,7 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
               value={blankValues[currentBlankIndex] || ''}
               onChange={(e) => handleBlankChange(currentBlankIndex, e.target.value)}
               disabled={submitted || loading || timeLeft === 0}
-              placeholder={placeholder}
-              title={placeholder}
-              aria-label={`Введите ${placeholder}`}
+              aria-label={`Поле ввода ${currentBlankIndex + 1}`}
             />
           );
           blankIndex++;
