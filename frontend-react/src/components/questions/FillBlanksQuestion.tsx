@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import QuestionBase, { QuestionBaseProps } from './QuestionBase';
-import CodeEditor from '../CodeEditor';
 
 const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props) => {
   const { question, onSubmitAnswer, submitted, loading, timeLeft } = props;
@@ -31,19 +30,34 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
     onSubmitAnswer(formattedAnswer);
   };
   
-  // Определяем язык программирования из вопроса или используем Python по умолчанию
-  const getLanguage = () => {
-    // Определяем язык из текста вопроса
-    const questionText = question.text?.toLowerCase() || '';
+  // Функция для рендеринга шаблона с полями ввода
+  const renderTemplate = () => {
+    if (!question.template) return null;
     
-    if (questionText.includes('python')) return 'python';
-    if (questionText.includes('javascript')) return 'javascript';
-    if (questionText.includes('java')) return 'java';
-    if (questionText.includes('c++')) return 'cpp';
-    if (questionText.includes('c#')) return 'csharp';
+    let parts = question.template.split('__');
+    let result = [];
     
-    // По умолчанию используем Python
-    return 'python';
+    for (let i = 0; i < parts.length; i++) {
+      // Добавляем текст части шаблона
+      result.push(<span key={`part-${i}`} className="text-sm sm:text-base">{parts[i]}</span>);
+      
+      // Добавляем поле ввода после каждой части, кроме последней
+      if (i < parts.length - 1) {
+        result.push(
+          <input
+            key={`input-${i}`}
+            type="text"
+            className="mx-1 p-1 border border-gray-300 rounded w-16 sm:w-24 text-center text-xs sm:text-sm"
+            value={blankValues[i] || ''}
+            onChange={(e) => handleBlankChange(i, e.target.value)}
+            disabled={submitted || loading || timeLeft === 0}
+            placeholder={question.blanks?.[i] || '...'}
+          />
+        );
+      }
+    }
+    
+    return <div className="bg-gray-100 p-3 sm:p-4 rounded-lg font-mono text-base sm:text-lg mb-3 sm:mb-4 text-gray-800 overflow-x-auto">{result}</div>;
   };
 
   return (
@@ -52,19 +66,25 @@ const FillBlanksQuestion: React.FC<Omit<QuestionBaseProps, 'children'>> = (props
         <div className="mb-4 sm:mb-6">
           <h3 className="text-base sm:text-lg font-medium text-gray-700 mb-1 sm:mb-2">Заполните пропуски:</h3>
           
-          {/* Используем новый компонент CodeEditor вместо простого шаблона */}
-          {question.template && (
-            <div className="mb-4">
-              <CodeEditor
-                code={question.template}
-                language={getLanguage()}
-                blanks={question.blanks || []}
-                blankValues={blankValues}
-                onBlankChange={handleBlankChange}
-                readOnly={submitted || loading || timeLeft === 0}
-              />
-            </div>
-          )}
+          {renderTemplate()}
+          
+          <div className="mt-4 sm:mt-6">
+            {question.blanks?.map((blank, index) => (
+              <div key={index} className="mb-2 sm:mb-3">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                  {blank}:
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-1.5 sm:p-2 border border-gray-300 rounded-md text-xs sm:text-sm"
+                  value={blankValues[index] || ''}
+                  onChange={(e) => handleBlankChange(index, e.target.value)}
+                  disabled={submitted || loading || timeLeft === 0}
+                  placeholder={`Введите ${blank}`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
         
         <div className="flex justify-center">
