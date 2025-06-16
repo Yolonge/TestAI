@@ -24,7 +24,7 @@ export default function LoginPage() {
   return (
     <div className="auth-container">
       <div className="login-box">
-        <h1>Вход в систему дуэлей</h1>
+        <h1>Вход</h1>
         
         {error && (
           <div className="error-message" role="alert">

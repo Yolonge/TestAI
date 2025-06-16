@@ -31,7 +31,7 @@ export default function RegisterPage() {
   return (
     <div className="auth-container">
       <div className="login-box">
-        <h1>Регистрация в системе дуэлей</h1>
+        <h1>Регистрация</h1>
         
         {error && (
           <div className="error-message" role="alert">
