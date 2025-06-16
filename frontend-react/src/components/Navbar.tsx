@@ -42,7 +42,7 @@ export default function Navbar() {
             onClick={toggleMenu} 
             aria-label="Меню приложения"
           >
-            <svg className="w-5 h-5" fill="currentColor" fillRule="evenodd" viewBox="0 0 20 20">
+            <svg className="w-5 h-5" fill="white" fillRule="evenodd" viewBox="0 0 20 20">
               <title>Меню</title>
               <path d="M0 0h20v2H0zm0 6h20v2H0zm0 6h20v2H0z" />
             </svg>
@@ -62,7 +62,7 @@ export default function Navbar() {
               className="flex items-center p-2 rounded-full hover:bg-gray-800"
               aria-label="Профиль пользователя"
             >
-              <svg className="w-6 h-6" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="white">
                 <title>Пользователь</title>
                 <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 4.6c2.8 0 5 2.2 5 5s-2.2 5-5 5-5-2.2-5-5 2.2-5 5-5zm7 14.5c-1.8 1.8-4.3 2.9-7 2.9s-5.2-1.1-7-2.9v-1.6c0-1.3.7-2 2-2h10c1.3 0 2 .7 2 2v1.6z" />
               </svg>
@@ -104,7 +104,7 @@ export default function Navbar() {
           <ul className="flex items-center">
             <li className="px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Поиск">
-                <svg className="w-5 h-5" viewBox="0 0 16 16" fillRule="evenodd">
+                <svg className="w-5 h-5" viewBox="0 0 16 16" fill="white" fillRule="evenodd">
                   <title>Поиск</title>
                   <path d="M6 2c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm0-2C2.7 0 0 2.7 0 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zm10 13.8L13.8 16l-3.6-3.6 2.2-2.2z" />
                   <path d="M16 13.8L13.8 16l-3.6-3.6 2.2-2.2z" />
@@ -113,7 +113,7 @@ export default function Navbar() {
             </li>
             <li className="px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Уведомления">
-                <svg className="w-5 h-5" viewBox="0 0 16 16">
+                <svg className="w-5 h-5" viewBox="0 0 16 16" fill="white">
                   <title>Уведомления</title>
                   <path d="M9 1.11V0H7v1.11A5.022 5.022 0 0 0 3.1 4.9L1 14h5a2 2 0 0 0 4 0h5l-2.1-9.1A5.022 5.022 0 0 0 9 1.11z" />
                 </svg>
@@ -121,7 +121,7 @@ export default function Navbar() {
             </li>
             <li className="px-1">
               <button className="p-2 rounded-full hover:bg-gray-800" type="button" aria-label="Приложения">
-                <svg className="w-5 h-5" viewBox="0 0 16 16">
+                <svg className="w-5 h-5" viewBox="0 0 16 16" fill="white">
                   <title>Приложения</title>
                   <circle cx="2" cy="2" r="2" />
                   <circle cx="8" cy="2" r="2" />
@@ -143,7 +143,7 @@ export default function Navbar() {
                     className="flex items-center p-2 rounded-full hover:bg-gray-800"
                     aria-label="Профиль пользователя"
                   >
-                    <svg className="w-6 h-6" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="white">
                       <title>Пользователь</title>
                       <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 4.6c2.8 0 5 2.2 5 5s-2.2 5-5 5-5-2.2-5-5 2.2-5 5-5zm7 14.5c-1.8 1.8-4.3 2.9-7 2.9s-5.2-1.1-7-2.9v-1.6c0-1.3.7-2 2-2h10c1.3 0 2 .7 2 2v1.6z" />
                     </svg>
