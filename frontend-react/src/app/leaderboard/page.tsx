@@ -129,7 +129,7 @@ export default function LeaderboardPage() {
                             ) : position === 3 ? (
                               <span className="text-lg text-yellow-600 mr-2">🥉</span>
                             ) : null}
-                            {position}
+                            <span className="text-black">{position}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
